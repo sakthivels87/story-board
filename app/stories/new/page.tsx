@@ -10,11 +10,14 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import axios, { AxiosError } from "axios";
 import { useRouter } from "next/navigation";
 import { CreateStorySchema } from "../../ValidationSchema";
+import ErrorMessage from "@/app/components/ErrorMessage";
+import Spinner from "@/app/components/Spinner";
 
 type StoryType = z.infer<typeof CreateStorySchema>;
 const NewStoryPage = () => {
   const router = useRouter();
   const [error, setError] = useState("");
+  const [isSubmitting, setSubmitting] = useState(false);
   const {
     register,
     control,
@@ -24,15 +27,16 @@ const NewStoryPage = () => {
 
   const onSubmit = handleSubmit(async (data) => {
     try {
+      setSubmitting(true);
       const validation = CreateStorySchema.safeParse(data);
       if (!validation.success) {
         console.log("Error in Form Submission...", validation.error.errors);
       }
       const res = await axios.post("/api/stories", data);
-      console.log("Response...", res);
       router.push("/stories");
     } catch (e) {
       setError("Unhandled exception Error");
+      setSubmitting(false);
     }
   });
   return (
@@ -46,11 +50,7 @@ const NewStoryPage = () => {
         <TextField.Root>
           <TextField.Input placeholder="Title..." {...register("title")} />
         </TextField.Root>
-        {errors.title && (
-          <Text as="p" color="red">
-            {errors.title.message}
-          </Text>
-        )}
+        <ErrorMessage>{errors.title?.message}</ErrorMessage>
         <Controller
           name="description"
           control={control}
@@ -58,12 +58,8 @@ const NewStoryPage = () => {
             <SimpleMDE placeholder="Description..." {...field} />
           )}
         />
-        {errors.description && (
-          <Text as="p" color="red">
-            {errors.description.message}
-          </Text>
-        )}
-        <Button>Submit New Story</Button>
+        <ErrorMessage>{errors.description?.message}</ErrorMessage>
+        <Button>Submit New Story {isSubmitting && <Spinner />}</Button>
       </div>
     </form>
   );
