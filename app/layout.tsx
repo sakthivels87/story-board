@@ -1,7 +1,7 @@
 import "./globals.css";
 import "@radix-ui/themes/styles.css";
 import NavBar from "@/app/NavBar";
-import { Theme, ThemePanel } from "@radix-ui/themes";
+import { Box, Container, Theme, ThemePanel } from "@radix-ui/themes";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 
