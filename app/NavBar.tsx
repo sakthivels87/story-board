@@ -12,7 +12,7 @@ const NavBar = () => {
     },
     {
       label: "Stories",
-      href: "/stories/*",
+      href: "/stories",
     },
   ];
   const currentPath = usePathname();
