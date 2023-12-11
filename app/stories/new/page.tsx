@@ -1,5 +1,4 @@
 "use client";
-
 import { Button, Callout, Text, TextField } from "@radix-ui/themes";
 import React, { useState } from "react";
 import SimpleMDE from "react-simplemde-editor";
@@ -14,6 +13,7 @@ import ErrorMessage from "@/app/components/ErrorMessage";
 import Spinner from "@/app/components/Spinner";
 
 type StoryType = z.infer<typeof CreateStorySchema>;
+
 const NewStoryPage = () => {
   const router = useRouter();
   const [error, setError] = useState("");
@@ -39,6 +39,7 @@ const NewStoryPage = () => {
       setSubmitting(false);
     }
   });
+
   return (
     <form onSubmit={onSubmit}>
       <div className="p-5 max-w-xl space-y-4">
