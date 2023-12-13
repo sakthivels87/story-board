@@ -1,6 +1,7 @@
 import { CreateStorySchema } from "@/app/ValidationSchema";
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/prisma/client";
+
 export async function PATCH(
   request: NextRequest,
   { params }: { params: { id: string } }
@@ -35,4 +36,19 @@ export async function GET(
   if (!story) return NextResponse.json("Not Found", { status: 404 });
 
   return NextResponse.json(story, { status: 200 });
+}
+
+export async function DELETE(
+  request: NextRequest,
+  { params }: { params: { id: string } }
+) {
+  const story = await prisma.story.findUnique({
+    where: { id: parseInt(params.id) },
+  });
+
+  if (!story)
+    return NextResponse.json("Given story not found", { status: 404 });
+
+  await prisma.story.delete({ where: { id: story.id } });
+  return NextResponse.json({});
 }
