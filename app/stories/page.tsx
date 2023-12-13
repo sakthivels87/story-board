@@ -45,5 +45,5 @@ const NewStoryPage = async () => {
     </Box>
   );
 };
-
+export const dynamic = "force-dynamic";
 export default NewStoryPage;

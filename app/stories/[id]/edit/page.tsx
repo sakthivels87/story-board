@@ -1,4 +1,5 @@
 import React from "react";
+import prisma from "@/prisma/client";
 import StoryForm from "../../_components/StoryForm";
 import { notFound } from "next/navigation";
 
