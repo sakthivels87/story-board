@@ -2,7 +2,7 @@ import prisma from "@/prisma/client";
 import { Box, Table } from "@radix-ui/themes";
 import StoryStatusBadge from "../components/StoryStatusBadge";
 import StoryAction from "./StoryAction";
-import { Link } from "@radix-ui/themes";
+import Link from "./_components/Link";
 
 const NewStoryPage = async () => {
   const stories = await prisma.story.findMany();
@@ -26,13 +26,7 @@ const NewStoryPage = async () => {
             return (
               <Table.Row key={story.id}>
                 <Table.RowHeaderCell>
-                  <Link
-                    href={`/stories/${story.id}`}
-                    color="indigo"
-                    weight="medium"
-                  >
-                    {story.title}
-                  </Link>
+                  <Link href={`/stories/${story.id}`}>{story.title}</Link>
                   <div className="block md:hidden">
                     <StoryStatusBadge status={story.status} />
                   </div>
