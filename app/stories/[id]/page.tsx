@@ -1,15 +1,7 @@
 import React from "react";
+import prisma from "@/prisma/client";
 import { notFound } from "next/navigation";
-import {
-  Box,
-  Button,
-  Card,
-  Flex,
-  Grid,
-  Heading,
-  Text,
-  TextArea,
-} from "@radix-ui/themes";
+import { Box, Button, Card, Flex, Grid, Heading } from "@radix-ui/themes";
 import Link from "next/link";
 import StoryStatusBadge from "@/app/components/StoryStatusBadge";
 import Markdown from "react-markdown";
@@ -37,7 +29,9 @@ const StoryDetailPage = async ({ params }: Props) => {
           <Button>
             <Link href={"/stories/" + story.id + "/edit"}>Edit the issue</Link>
           </Button>
-          <Button>Delete the issue</Button>
+          <Button>
+            <Link href="/stories">Delete the issue</Link>
+          </Button>
         </Flex>
       </Box>
     </Grid>

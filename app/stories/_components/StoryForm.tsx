@@ -39,8 +39,13 @@ const StoryForm = ({ story }: Props) => {
       if (!validation.success) {
         console.log("Error in Form Submission...", validation.error.errors);
       }
-      const res = await axios.post("/api/stories", data);
+      if (story) {
+        await axios.patch(`/api/stories/${story.id}`, data);
+      } else {
+        await axios.post("/api/stories", data);
+      }
       router.push("/stories");
+      router.refresh();
     } catch (e) {
       setError("Unhandled exception Error");
       setSubmitting(false);
