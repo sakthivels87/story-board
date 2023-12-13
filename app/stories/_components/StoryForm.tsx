@@ -37,7 +37,8 @@ const StoryForm = ({ story }: Props) => {
       setSubmitting(true);
       const validation = CreateStorySchema.safeParse(data);
       if (!validation.success) {
-        console.log("Error in Form Submission...", validation.error.errors);
+        setError("Not valid request: " + validation.error.errors);
+        setSubmitting(false);
       }
       if (story) {
         await axios.patch(`/api/stories/${story.id}`, data);
@@ -64,19 +65,16 @@ const StoryForm = ({ story }: Props) => {
           <TextField.Input
             placeholder="Title..."
             {...register("title")}
-            value={story?.title}
+            defaultValue={story?.title}
           />
         </TextField.Root>
         <ErrorMessage>{errors.title?.message}</ErrorMessage>
         <Controller
           name="description"
+          defaultValue={story?.description}
           control={control}
           render={({ field }) => (
-            <SimpleMDE
-              placeholder="Description..."
-              {...field}
-              value={story?.description}
-            />
+            <SimpleMDE placeholder="Description..." {...field} />
           )}
         />
         <ErrorMessage>{errors.description?.message}</ErrorMessage>
