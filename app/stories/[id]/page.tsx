@@ -5,6 +5,8 @@ import { Box, Button, Card, Flex, Grid, Heading } from "@radix-ui/themes";
 import Link from "next/link";
 import StoryStatusBadge from "@/app/components/StoryStatusBadge";
 import Markdown from "react-markdown";
+import axios from "axios";
+import DeleteStoryButton from "./DeleteStoryButton";
 
 interface Props {
   params: { id: string };
@@ -29,9 +31,7 @@ const StoryDetailPage = async ({ params }: Props) => {
           <Button>
             <Link href={"/stories/" + story.id + "/edit"}>Edit the issue</Link>
           </Button>
-          <Button>
-            <Link href="/stories">Delete the issue</Link>
-          </Button>
+          <DeleteStoryButton id={story.id} />
         </Flex>
       </Box>
     </Grid>
