@@ -8,6 +8,8 @@
 # testing
 /coverage
 
+# loader html file
+loader.html
 # next.js
 /.next/
 /out/
