@@ -1,4 +1,4 @@
-import { CreateStorySchema } from "@/app/ValidationSchema";
+import { pathStorySchema } from "@/app/ValidationSchema";
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/prisma/client";
 import { getServerSession } from "next-auth";
@@ -8,10 +8,10 @@ export async function PATCH(
   request: NextRequest,
   { params }: { params: { id: string } }
 ) {
-  const session = await getServerSession(authOptions);
-  if (!session) return NextResponse.json({}, { status: 401 });
+  // const session = await getServerSession(authOptions);
+  // if (!session) return NextResponse.json({}, { status: 401 });
   const body = await request.json();
-  const valiation = CreateStorySchema.safeParse(body);
+  const valiation = pathStorySchema.safeParse(body);
   if (!valiation.success)
     return NextResponse.json(valiation.error.format(), { status: 400 });
 
@@ -19,12 +19,19 @@ export async function PATCH(
     where: { id: parseInt(params.id) },
   });
   if (!story) return NextResponse.json("Not found", { status: 404 });
-
+  const { title, description, assignedToUserId } = body;
+  if (assignedToUserId) {
+    const user = await prisma.user.findUnique({
+      where: { id: assignedToUserId },
+    });
+    if (!user) return NextResponse.json("User not found..", { status: 400 });
+  }
   const updateStory = await prisma?.story.update({
     where: { id: story.id },
     data: {
-      title: body.title,
-      description: body.description,
+      title,
+      description,
+      assignedToUserId,
     },
   });
   return NextResponse.json(updateStory);
