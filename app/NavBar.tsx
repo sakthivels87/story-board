@@ -1,5 +1,6 @@
 "use client";
 import Link from "next/link";
+import Skeleton from "@/app/components/Skeleton";
 import { SiStorybook } from "react-icons/si";
 import { usePathname } from "next/navigation";
 import classNames from "classnames";
@@ -55,7 +56,7 @@ const NavLinks = () => {
 
 const AuthStatus = () => {
   const { status, data: session } = useSession();
-  if (status === "loading") return null;
+  if (status === "loading") return <Skeleton width="2.5rem" />;
   if (status === "unauthenticated")
     return (
       <Link className="nav-link" href="/api/auth/signin">
