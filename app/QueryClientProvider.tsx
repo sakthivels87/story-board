@@ -1,3 +1,4 @@
+"use client";
 import React, { PropsWithChildren, useState } from "react";
 import {
   QueryClient,
