@@ -31,7 +31,7 @@ const StoryDetailPage = async ({ params }: Props) => {
       </Box>
       {session && (
         <Flex direction="column" gap="4">
-          <AssigneeSelect />
+          <AssigneeSelect story={story} />
           <Button className="mt-4">
             <Link href={"/stories/" + story.id + "/edit"}>Edit the issue</Link>
           </Button>
