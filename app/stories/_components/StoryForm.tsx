@@ -45,7 +45,7 @@ const StoryForm = ({ story }: Props) => {
       } else {
         await axios.post("/api/stories", data);
       }
-      router.push("/stories");
+      router.push("/stories/list");
       router.refresh();
     } catch (e) {
       setError("Unhandled exception Error");

@@ -31,7 +31,7 @@ const NavLinks = () => {
     },
     {
       label: "Stories",
-      href: "/stories",
+      href: "/stories/list",
     },
   ];
   const currentPath = usePathname();
