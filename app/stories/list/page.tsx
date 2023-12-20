@@ -3,11 +3,28 @@ import { Box, Table } from "@radix-ui/themes";
 import StoryStatusBadge from "../../components/StoryStatusBadge";
 import StoryAction from "./StoryAction";
 import Link from "../_components/Link";
-import { Status } from "@prisma/client";
+import NextLink from "next/link";
+import { FaArrowUp } from "react-icons/fa";
+import { Status, Story } from "@prisma/client";
 
 interface Props {
-  searchParams: { status: Status };
+  searchParams: { status: Status; orderBy: keyof Story };
 }
+
+const columns: {
+  label: string;
+  value: keyof Story;
+  className?: string;
+}[] = [
+  { label: "Story", value: "title" },
+  { label: "Status", value: "status", className: "hidden md:table-cell" },
+  {
+    label: "Created At",
+    value: "createdAt",
+    className: "hidden md:table-cell",
+  },
+];
+
 const NewStoryPage = async ({ searchParams }: Props) => {
   const stories = await prisma.story.findMany({
     where: { status: searchParams.status },
@@ -18,13 +35,21 @@ const NewStoryPage = async ({ searchParams }: Props) => {
       <Table.Root className="mt-5" variant="surface">
         <Table.Header>
           <Table.Row>
-            <Table.ColumnHeaderCell>Story</Table.ColumnHeaderCell>
-            <Table.ColumnHeaderCell className="hidden md:table-cell">
-              Status
-            </Table.ColumnHeaderCell>
-            <Table.ColumnHeaderCell className="hidden md:table-cell">
-              Created At
-            </Table.ColumnHeaderCell>
+            {columns.map((column) => (
+              <Table.ColumnHeaderCell
+                key={column.value}
+                className={column.className}
+              >
+                <NextLink
+                  href={{ query: { ...searchParams, orderBy: column.value } }}
+                >
+                  {column.label}{" "}
+                </NextLink>
+                {column.value === searchParams.orderBy && (
+                  <FaArrowUp className="inline" />
+                )}
+              </Table.ColumnHeaderCell>
+            ))}
           </Table.Row>
         </Table.Header>
         <Table.Body>
