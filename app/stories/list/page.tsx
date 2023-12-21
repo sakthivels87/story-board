@@ -3,13 +3,12 @@ import { Box, Table } from "@radix-ui/themes";
 import StoryStatusBadge from "../../components/StoryStatusBadge";
 import StoryAction from "./StoryAction";
 import Link from "../_components/Link";
-import NextLink from "next/link";
-import { FaArrowUp } from "react-icons/fa";
 import { Status, Story } from "@prisma/client";
 import TableHeader from "./TableHeader";
+import Pagination from "@/app/components/Pagination";
 
 interface Props {
-  searchParams: { status: Status; orderBy: keyof Story };
+  searchParams: { status: Status; orderBy: keyof Story; page: string };
 }
 
 const columns: {
@@ -40,10 +39,19 @@ const NewStoryPage = async ({ searchParams }: Props) => {
     ? { [searchParams.orderBy]: "asc" }
     : undefined;
 
+  const page = parseInt(searchParams.page) || 1;
+  const pageSize = 10;
+
   const stories = await prisma.story.findMany({
     where: { status: searchParams.status },
     orderBy,
+    skip: (page - 1) * pageSize,
+    take: pageSize,
   });
+  const storyCount = await prisma.story.count({
+    where: { status: searchParams.status },
+  });
+
   return (
     <Box className="max-w-5xl">
       <StoryAction />
@@ -72,6 +80,11 @@ const NewStoryPage = async ({ searchParams }: Props) => {
           })}
         </Table.Body>
       </Table.Root>
+      <Pagination
+        pageSize={pageSize}
+        itemCount={storyCount}
+        currentPage={page}
+      />
     </Box>
   );
 };
