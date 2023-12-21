@@ -6,6 +6,7 @@ import Link from "../_components/Link";
 import NextLink from "next/link";
 import { FaArrowUp } from "react-icons/fa";
 import { Status, Story } from "@prisma/client";
+import TableHeader from "./TableHeader";
 
 interface Props {
   searchParams: { status: Status; orderBy: keyof Story };
@@ -15,42 +16,40 @@ const columns: {
   label: string;
   value: keyof Story;
   className?: string;
+  direction?: string;
 }[] = [
-  { label: "Story", value: "title" },
-  { label: "Status", value: "status", className: "hidden md:table-cell" },
+  { label: "Story", value: "title", direction: "" },
+  {
+    label: "Status",
+    value: "status",
+    className: "hidden md:table-cell",
+    direction: "",
+  },
   {
     label: "Created At",
     value: "createdAt",
     className: "hidden md:table-cell",
+    direction: "",
   },
 ];
 
 const NewStoryPage = async ({ searchParams }: Props) => {
+  const orderBy = columns
+    .map((column) => column.value)
+    .includes(searchParams.orderBy)
+    ? { [searchParams.orderBy]: "asc" }
+    : undefined;
+
   const stories = await prisma.story.findMany({
     where: { status: searchParams.status },
+    orderBy,
   });
   return (
     <Box className="max-w-5xl">
       <StoryAction />
       <Table.Root className="mt-5" variant="surface">
         <Table.Header>
-          <Table.Row>
-            {columns.map((column) => (
-              <Table.ColumnHeaderCell
-                key={column.value}
-                className={column.className}
-              >
-                <NextLink
-                  href={{ query: { ...searchParams, orderBy: column.value } }}
-                >
-                  {column.label}{" "}
-                </NextLink>
-                {column.value === searchParams.orderBy && (
-                  <FaArrowUp className="inline" />
-                )}
-              </Table.ColumnHeaderCell>
-            ))}
-          </Table.Row>
+          <TableHeader searchParams={searchParams} />
         </Table.Header>
         <Table.Body>
           {stories.map((story) => {
