@@ -32,12 +32,18 @@ const Pagination = ({ itemCount, pageSize, currentPage }: Props) => {
       <Text>
         Page {currentPage} of {pageCount}
       </Text>
-      <Button variant="soft" color="gray" onClick={() => changePage(1)}>
+      <Button
+        variant="soft"
+        color="gray"
+        disabled={currentPage === 1}
+        onClick={() => changePage(1)}
+      >
         <MdFirstPage />
       </Button>
       <Button
         variant="soft"
         color="gray"
+        disabled={currentPage === 1}
         onClick={() => changePage(currentPage - 1)}
       >
         <MdChevronLeft />
@@ -45,11 +51,17 @@ const Pagination = ({ itemCount, pageSize, currentPage }: Props) => {
       <Button
         variant="soft"
         color="gray"
+        disabled={currentPage === pageCount}
         onClick={() => changePage(currentPage + 1)}
       >
         <MdChevronRight />
       </Button>
-      <Button variant="soft" color="gray" onClick={() => changePage(pageCount)}>
+      <Button
+        variant="soft"
+        color="gray"
+        disabled={currentPage === pageCount}
+        onClick={() => changePage(pageCount)}
+      >
         <MdLastPage />
       </Button>
     </Flex>
