@@ -2,11 +2,11 @@
 import { Status, Story } from "@prisma/client";
 import { Table } from "@radix-ui/themes";
 import NextLink from "next/link";
-import { FaArrowUp } from "react-icons/fa";
-import React from "react";
+import { FaArrowDown, FaArrowUp } from "react-icons/fa";
+import React, { useState } from "react";
 
 interface Props {
-  searchParams: { status: Status; orderBy: keyof Story };
+  searchParams: { status: Status; orderBy: keyof Story; sortOrder: string };
 }
 
 const columns: {
@@ -31,17 +31,38 @@ const columns: {
 ];
 
 const TableHeader = ({ searchParams }: Props) => {
+  const [sortingOrder, setSortingOrder] = useState("asc");
+  const handleSortOrder = () => {
+    if (sortingOrder == "" || sortingOrder === "desc") {
+      setSortingOrder("asc");
+    } else {
+      setSortingOrder("desc");
+    }
+  };
   return (
     <Table.Row>
       {columns.map((column) => (
-        <Table.ColumnHeaderCell key={column.value} className={column.className}>
+        <Table.ColumnHeaderCell
+          key={column.value}
+          className={column.className}
+          onClick={handleSortOrder}
+        >
           <NextLink
-            href={{ query: { ...searchParams, orderBy: column.value } }}
+            href={{
+              query: {
+                ...searchParams,
+                orderBy: column.value,
+                sortOrder: sortingOrder,
+              },
+            }}
           >
             {column.label}{" "}
           </NextLink>
-          {column.value === searchParams.orderBy && (
+          {sortingOrder === "asc" && column.value === searchParams.orderBy && (
             <FaArrowUp className="inline" />
+          )}
+          {sortingOrder === "desc" && column.value === searchParams.orderBy && (
+            <FaArrowDown className="inline" />
           )}
         </Table.ColumnHeaderCell>
       ))}

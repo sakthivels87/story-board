@@ -9,7 +9,12 @@ import Pagination from "@/app/components/Pagination";
 import { Metadata } from "next";
 
 interface Props {
-  searchParams: { status: Status; orderBy: keyof Story; page: string };
+  searchParams: {
+    status: Status;
+    orderBy: keyof Story;
+    page: string;
+    sortOrder: string;
+  };
 }
 
 const columns: {
@@ -37,9 +42,8 @@ const NewStoryPage = async ({ searchParams }: Props) => {
   const orderBy = columns
     .map((column) => column.value)
     .includes(searchParams.orderBy)
-    ? { [searchParams.orderBy]: "asc" }
+    ? { [searchParams.orderBy]: searchParams.sortOrder }
     : undefined;
-
   const page = parseInt(searchParams.page) || 1;
   const pageSize = 10;
 

@@ -32,6 +32,6 @@ body {
 }
 
 /** Including pointer for cursor***/
-.rt-BaseButton.rt-Button {
-  cursor: pointer;
+.radix-themes {
+  --cursor-button: pointer;
 }
