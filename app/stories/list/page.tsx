@@ -6,6 +6,7 @@ import Link from "../_components/Link";
 import { Status, Story } from "@prisma/client";
 import TableHeader from "./TableHeader";
 import Pagination from "@/app/components/Pagination";
+import { Metadata } from "next";
 
 interface Props {
   searchParams: { status: Status; orderBy: keyof Story; page: string };
@@ -89,4 +90,8 @@ const NewStoryPage = async ({ searchParams }: Props) => {
   );
 };
 export const dynamic = "force-dynamic";
+export const metadata: Metadata = {
+  title: "Story List - Details",
+  description: "This dashboard is created to track the list of stories.",
+};
 export default NewStoryPage;
