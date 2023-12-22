@@ -1,4 +1,4 @@
-import React from "react";
+import React, { cache } from "react";
 import prisma from "@/prisma/client";
 import { notFound } from "next/navigation";
 import { Box, Button, Card, Flex, Grid, Heading } from "@radix-ui/themes";
@@ -13,11 +13,13 @@ import AssigneeSelect from "./AssigneeSelect";
 interface Props {
   params: { id: string };
 }
+
+const fetchStory = cache((storyId: number) =>
+  prisma.story.findUnique({ where: { id: storyId } })
+);
 const StoryDetailPage = async ({ params }: Props) => {
   const session = await getServerSession(authOptions);
-  const story = await prisma?.story.findUnique({
-    where: { id: parseInt(params.id) },
-  });
+  const story = await fetchStory(parseInt(params.id));
   if (!story) notFound();
 
   return (
@@ -43,3 +45,11 @@ const StoryDetailPage = async ({ params }: Props) => {
 };
 
 export default StoryDetailPage;
+
+export async function generateMetadata({ params }: Props) {
+  const story = await fetchStory(parseInt(params.id));
+  return {
+    title: story?.title,
+    description: "Details about this story: " + story?.description,
+  };
+}

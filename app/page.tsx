@@ -2,6 +2,7 @@ import { Flex, Grid } from "@radix-ui/themes";
 import StoryChart from "./StoryChart";
 import StoryStatus from "./StoryStatus";
 import StorySummary from "./StorySummary";
+import { Metadata } from "next";
 
 export default async function Home() {
   const open =
@@ -31,3 +32,9 @@ export default async function Home() {
     </main>
   );
 }
+
+export const metadata: Metadata = {
+  title: "Story - Dashboard",
+  description:
+    "This story dashboard is used to provide quick highlight about this story board.",
+};
