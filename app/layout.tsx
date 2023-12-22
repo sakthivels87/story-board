@@ -1,13 +1,15 @@
-import "./globals.css";
 import "@radix-ui/themes/styles.css";
+import "./theme-config.css";
+import "./globals.css";
+
 import NavBar from "@/app/NavBar";
-import { Box, Container, Theme, ThemePanel } from "@radix-ui/themes";
+import { Theme } from "@radix-ui/themes";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import AuthProvider from "./auth/Provider";
 import QueryClientProvider from "./QueryClientProvider";
 
-const inter = Inter({ subsets: ["latin"] });
+const inter = Inter({ subsets: ["latin"], variable: "--font-inter-" });
 
 export const metadata: Metadata = {
   title: "Create Next App",

@@ -52,7 +52,7 @@ const NewStoryPage = async ({ searchParams }: Props) => {
   const storyCount = await prisma.story.count({
     where: { status: searchParams.status },
   });
-
+  if (stories.length === 0) return null;
   return (
     <Box className="max-w-5xl">
       <StoryAction />
@@ -74,7 +74,7 @@ const NewStoryPage = async ({ searchParams }: Props) => {
                   <StoryStatusBadge status={story.status} />
                 </Table.Cell>
                 <Table.Cell className="hidden md:table-cell">
-                  {story.description}
+                  {story.createdAt.toLocaleString()}
                 </Table.Cell>
               </Table.Row>
             );

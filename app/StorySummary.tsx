@@ -23,10 +23,13 @@ const StorySummary = ({ open, inProgress, closed }: Props) => {
       {containers.map((story) => (
         <Card key={story.label}>
           <Flex direction="column" gap="1">
-            <Link href={`/stories/list?status=${story.status}`}>
+            <Link
+              href={`/stories/list?status=${story.status}`}
+              className="text-sm font-medium"
+            >
               {story.label}
             </Link>
-            <Text size="6" weight="medium">
+            <Text size="6" weight="medium" className="font-bold">
               {story.value}
             </Text>
           </Flex>

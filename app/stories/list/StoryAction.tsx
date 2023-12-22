@@ -8,7 +8,7 @@ const StoryAction = () => {
   return (
     <Flex justify="between" mt="5">
       <StoryStatusFilter />
-      <Button>
+      <Button size="3">
         <Link href="/stories/new">New Story</Link>
       </Button>
     </Flex>

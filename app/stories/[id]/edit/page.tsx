@@ -1,8 +1,13 @@
 import React from "react";
 import prisma from "@/prisma/client";
-import StoryForm from "../../_components/StoryForm";
 import { notFound } from "next/navigation";
+import dynamic from "next/dynamic";
+import StoryFormSkeleton from "./loading";
 
+const StoryForm = dynamic(() => import("@/app/stories/_components/StoryForm"), {
+  ssr: false,
+  loading: () => <StoryFormSkeleton />,
+});
 interface Props {
   params: { id: string };
 }

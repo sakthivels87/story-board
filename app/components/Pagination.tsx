@@ -1,5 +1,5 @@
 "use client";
-import { Button, Flex, Text } from "@radix-ui/themes";
+import { Box, Button, Flex, Text } from "@radix-ui/themes";
 import { useRouter, useSearchParams } from "next/navigation";
 import React from "react";
 import {
@@ -28,43 +28,45 @@ const Pagination = ({ itemCount, pageSize, currentPage }: Props) => {
   if (pageCount <= 1) return null;
 
   return (
-    <Flex justify="center" gap="2">
-      <Text>
-        Page {currentPage} of {pageCount}
-      </Text>
-      <Button
-        variant="soft"
-        color="gray"
-        disabled={currentPage === 1}
-        onClick={() => changePage(1)}
-      >
-        <MdFirstPage />
-      </Button>
-      <Button
-        variant="soft"
-        color="gray"
-        disabled={currentPage === 1}
-        onClick={() => changePage(currentPage - 1)}
-      >
-        <MdChevronLeft />
-      </Button>
-      <Button
-        variant="soft"
-        color="gray"
-        disabled={currentPage === pageCount}
-        onClick={() => changePage(currentPage + 1)}
-      >
-        <MdChevronRight />
-      </Button>
-      <Button
-        variant="soft"
-        color="gray"
-        disabled={currentPage === pageCount}
-        onClick={() => changePage(pageCount)}
-      >
-        <MdLastPage />
-      </Button>
-    </Flex>
+    <Box mt="4">
+      <Flex align="center" justify="end" gap="2">
+        <Text>
+          Page {currentPage} of {pageCount}
+        </Text>
+        <Button
+          variant="soft"
+          color="gray"
+          disabled={currentPage === 1}
+          onClick={() => changePage(1)}
+        >
+          <MdFirstPage />
+        </Button>
+        <Button
+          variant="soft"
+          color="gray"
+          disabled={currentPage === 1}
+          onClick={() => changePage(currentPage - 1)}
+        >
+          <MdChevronLeft />
+        </Button>
+        <Button
+          variant="soft"
+          color="gray"
+          disabled={currentPage === pageCount}
+          onClick={() => changePage(currentPage + 1)}
+        >
+          <MdChevronRight />
+        </Button>
+        <Button
+          variant="soft"
+          color="gray"
+          disabled={currentPage === pageCount}
+          onClick={() => changePage(pageCount)}
+        >
+          <MdLastPage />
+        </Button>
+      </Flex>
+    </Box>
   );
 };
 

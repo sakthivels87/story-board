@@ -25,3 +25,13 @@ body {
     @apply text-zinc-500 hover:text-zinc-800 transition-colors
   }
 }
+
+/** Override cursor tooltip **/
+.recharts-rectangle.recharts-tooltip-cursor {
+  display: none;
+}
+
+/** Including pointer for cursor***/
+.rt-BaseButton.rt-Button {
+  cursor: pointer;
+}
