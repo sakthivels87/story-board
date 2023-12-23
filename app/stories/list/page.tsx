@@ -1,5 +1,5 @@
 import prisma from "@/prisma/client";
-import { Box, Table } from "@radix-ui/themes";
+import { Box, Flex, Table } from "@radix-ui/themes";
 import StoryStatusBadge from "../../components/StoryStatusBadge";
 import StoryAction from "./StoryAction";
 import Link from "../_components/Link";
@@ -14,6 +14,7 @@ interface Props {
     orderBy: keyof Story;
     page: string;
     sortOrder: string;
+    pageSize: string;
   };
 }
 
@@ -45,7 +46,7 @@ const NewStoryPage = async ({ searchParams }: Props) => {
     ? { [searchParams.orderBy]: searchParams.sortOrder }
     : undefined;
   const page = parseInt(searchParams.page) || 1;
-  const pageSize = 10;
+  const pageSize = parseInt(searchParams.pageSize) || 10;
 
   const stories = await prisma.story.findMany({
     where: { status: searchParams.status },
@@ -53,13 +54,16 @@ const NewStoryPage = async ({ searchParams }: Props) => {
     skip: (page - 1) * pageSize,
     take: pageSize,
   });
+
   const storyCount = await prisma.story.count({
     where: { status: searchParams.status },
   });
+
   if (stories.length === 0) return null;
+
   return (
     <Box className="max-w-5xl">
-      <StoryAction />
+      <StoryAction storyCount={storyCount} />
       <Table.Root className="mt-5" variant="surface">
         <Table.Header>
           <TableHeader searchParams={searchParams} />
