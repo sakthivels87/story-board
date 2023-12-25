@@ -9,6 +9,7 @@ import DeleteStoryButton from "./DeleteStoryButton";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/authOptions";
 import AssigneeSelect from "./AssigneeSelect";
+import UpdateStoryStatus from "./UpdateStoryStatus";
 
 interface Props {
   params: { id: string };
@@ -25,8 +26,10 @@ const StoryDetailPage = async ({ params }: Props) => {
   return (
     <Grid columns={{ initial: "1", sm: "5" }} gap="5">
       <Box className="md:col-span-4">
-        <Heading>{story.title}</Heading>
-        <StoryStatusBadge status={story.status} />
+        <Flex direction="column" gap="3" align="start">
+          <Heading>{story.title}</Heading>
+          <UpdateStoryStatus story={story} />
+        </Flex>
         <Card my="5">
           <Markdown>{story.description}</Markdown>
         </Card>

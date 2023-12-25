@@ -11,6 +11,7 @@ const AssigneeSelect = ({ story }: { story: Story }) => {
   const { data: users, error, isLoading } = useUsers();
 
   const assingUser = async (userId: String) => {
+    userId = userId === "unassigned" ? "" : userId;
     await axios
       .patch("/api/stories/" + story.id, {
         assignedToUserId: userId || null,
@@ -32,7 +33,7 @@ const AssigneeSelect = ({ story }: { story: Story }) => {
         <Select.Content>
           <Select.Group>
             <Select.Label>Select User</Select.Label>
-            <Select.Item value=" ">UnAssigned</Select.Item>
+            <Select.Item value="unassigned">UnAssigned</Select.Item>
             {users?.map((user) => (
               <Select.Item key={user.id} value={user.id}>
                 {user.name}
