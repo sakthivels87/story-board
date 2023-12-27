@@ -7,7 +7,7 @@ const LoadingStoryPage = () => {
   const stories = [1, 2, 3, 4, 5];
   return (
     <Box className="max-w-5xl">
-      <StoryAction />
+      <StoryAction storyCount={10} />
       <Table.Root className="mt-5" variant="surface">
         <Table.Header>
           <Table.Row>

@@ -34,4 +34,10 @@ body {
 /** Including pointer for cursor***/
 .radix-themes {
   --cursor-button: pointer;
+  --cursor-disabled: default;
+  --cursor-link: pointer;
+  --cursor-menu-item: pointer;
+  --cursor-slider-thumb: pointer;
+  --cursor-slider-thumb-active: pointer;
+  --cursor-switch: pointer;
 }

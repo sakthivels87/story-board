@@ -3,13 +3,14 @@ import prisma from "@/prisma/client";
 import { notFound } from "next/navigation";
 import { Box, Button, Card, Flex, Grid, Heading } from "@radix-ui/themes";
 import Link from "next/link";
-import StoryStatusBadge from "@/app/components/StoryStatusBadge";
 import Markdown from "react-markdown";
 import DeleteStoryButton from "./DeleteStoryButton";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/authOptions";
 import AssigneeSelect from "./AssigneeSelect";
 import UpdateStoryStatus from "./UpdateStoryStatus";
+import StoryStatusBadge from "@/app/components/StoryStatusBadge";
+import StoryComments from "../_components/StoryComments";
 
 interface Props {
   params: { id: string };
@@ -22,17 +23,22 @@ const StoryDetailPage = async ({ params }: Props) => {
   const session = await getServerSession(authOptions);
   const story = await fetchStory(parseInt(params.id));
   if (!story) notFound();
-
+  const renderComp = session ? (
+    <UpdateStoryStatus story={story} />
+  ) : (
+    <StoryStatusBadge status={story.status} />
+  );
   return (
     <Grid columns={{ initial: "1", sm: "5" }} gap="5">
       <Box className="md:col-span-4">
         <Flex direction="column" gap="3" align="start">
           <Heading>{story.title}</Heading>
-          <UpdateStoryStatus story={story} />
+          {renderComp}
         </Flex>
         <Card my="5">
           <Markdown>{story.description}</Markdown>
         </Card>
+        <StoryComments />
       </Box>
       {session && (
         <Flex direction="column" gap="4">
