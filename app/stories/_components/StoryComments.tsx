@@ -5,14 +5,19 @@ import dynamic from "next/dynamic";
 import SimpleMDE from "easymde";
 import React, { useMemo, useState } from "react";
 import { SimpleMdeToCodemirrorEvents } from "react-simplemde-editor";
-
+import StoryCommentBox from "./StoryCommentBox";
+import { useSession } from "next-auth/react";
+import Skeleton from "react-loading-skeleton";
 const SimpleMde = dynamic(() => import("react-simplemde-editor"));
+
 const StoryComments = () => {
   const [toggleEditor, setToggleEditor] = useState(false);
   const [comment, setComment] = useState("Add your comments...");
+  const { status, data: session } = useSession();
   const onChange = (value: string) => {
     setComment(value);
   };
+
   const events = useMemo(() => {
     return {
       focus: () => console.log("focused..."),
@@ -63,6 +68,13 @@ const StoryComments = () => {
           </Flex>
         </Box>
       )}
+      <Flex my="2" gap="3" direction="column">
+        <StoryCommentBox
+          name={session?.user?.name! || "Sakthivel Samuthiram"}
+          imageUrl={session?.user?.image || null}
+          comment="sample Text from story comments box."
+        ></StoryCommentBox>
+      </Flex>
     </div>
   );
 };
