@@ -46,7 +46,7 @@ const NewStoryPage = async ({ searchParams }: Props) => {
     ? { [searchParams.orderBy]: searchParams.sortOrder }
     : undefined;
   const page = parseInt(searchParams.page) || 1;
-  const pageSize = parseInt(searchParams.pageSize) || 10;
+  const pageSize = parseInt(searchParams.pageSize) || 5;
 
   const stories = await prisma.story.findMany({
     where: { status: searchParams.status },

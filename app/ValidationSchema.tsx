@@ -19,3 +19,15 @@ export const pathStorySchema = z.object({
     .optional()
     .nullable(),
 });
+
+export const StoryCommentSchema = z.object({
+  storyId: z.string().min(1, { message: "Story Id is required.." }),
+  comment: z
+    .string()
+    .min(3, { message: "Story comment text is required." })
+    .max(65535),
+  userId: z
+    .string()
+    .min(10, { message: "valid user id is required." })
+    .max(255),
+});

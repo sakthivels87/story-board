@@ -18,7 +18,7 @@ const SelectPageSize = ({ itemCount, defaultItems = 5 }: Props) => {
         Filter By: <b>Page size</b>
       </Text>
       <Select.Root
-        defaultValue={searchParams.get("pageSize") || ""}
+        defaultValue={searchParams.get("pageSize") || "5"}
         onValueChange={(pageSize) => {
           const query = pageSize ? "?pageSize=" + pageSize : "";
           router.push("/stories/list/" + query);

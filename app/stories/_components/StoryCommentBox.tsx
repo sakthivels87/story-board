@@ -1,6 +1,9 @@
-import { User } from "@prisma/client";
 import { Avatar, Callout, Card, Flex, Text } from "@radix-ui/themes";
 import React from "react";
+import dynamic from "next/dynamic";
+import Markdown from "react-markdown";
+
+const SimpleMDE = dynamic(() => import("react-simplemde-editor"));
 
 interface Props {
   name: string | null;
@@ -17,7 +20,9 @@ const StoryCommentBox = ({ name, imageUrl, comment }: Props) => {
         </Text>
       </Flex>
       <Callout.Root mt="4" color="gray">
-        <Callout.Text>{comment}</Callout.Text>
+        <Callout.Text>
+          <Markdown>{comment}</Markdown>
+        </Callout.Text>
       </Callout.Root>
     </Card>
   );
