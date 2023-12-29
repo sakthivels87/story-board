@@ -1,31 +1,43 @@
 import { Avatar, Callout, Card, Flex, Text } from "@radix-ui/themes";
 import React from "react";
-import dynamic from "next/dynamic";
 import Markdown from "react-markdown";
-
-const SimpleMDE = dynamic(() => import("react-simplemde-editor"));
-
+import UserProfile from "./UserProfile";
+import { Comments } from "@prisma/client";
+import { useQuery } from "@tanstack/react-query";
+import axios from "axios";
 interface Props {
-  name: string | null;
-  imageUrl: string | null;
-  comment: string;
+  storyId: string;
+  newComment: string;
 }
-const StoryCommentBox = ({ name, imageUrl, comment }: Props) => {
+const fetchComments = (stroyId: string) =>
+  axios
+    .get<Comments[]>(`/api/stories/${stroyId}/comments`)
+    .then((res) => res.data);
+
+const StoryCommentBox = async ({ storyId, newComment }: Props) => {
+  const comments = await fetchComments(storyId);
   return (
-    <Card>
-      <Flex gap="3">
-        <Avatar fallback="A" src={imageUrl!} my="-2" radius="full" />
-        <Text weight="medium" align="center">
-          {name}
-        </Text>
-      </Flex>
-      <Callout.Root mt="4" color="gray">
-        <Callout.Text>
-          <Markdown>{comment}</Markdown>
-        </Callout.Text>
-      </Callout.Root>
-    </Card>
+    <>
+      {comments?.map((c) => (
+        <Card key={c.id}>
+          <UserProfile userId={c.userId} />
+          <Callout.Root mt="4" color="gray">
+            <Callout.Text>
+              <Markdown>{c.comment}</Markdown>
+            </Callout.Text>
+          </Callout.Root>
+        </Card>
+      ))}
+    </>
   );
 };
 
 export default StoryCommentBox;
+
+export const useComments = (id: string) =>
+  useQuery<Comments[]>({
+    queryKey: ["comments"],
+    queryFn: () =>
+      axios.get("/api/stories/" + id + "/comments").then((res) => res.data),
+    retry: 3,
+  });

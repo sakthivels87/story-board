@@ -6,16 +6,19 @@ import SimpleMDE from "easymde";
 import React, { useMemo, useState } from "react";
 import { SimpleMdeToCodemirrorEvents } from "react-simplemde-editor";
 import StoryCommentBox from "./StoryCommentBox";
-import { useSession } from "next-auth/react";
+import axios from "axios";
+import { useQuery } from "@tanstack/react-query";
 import Skeleton from "react-loading-skeleton";
+import { Comments } from "@prisma/client";
+
 const SimpleMde = dynamic(() => import("react-simplemde-editor"));
 
-const StoryComments = () => {
+const StoryComments = async ({ storyId }: { storyId: string }) => {
   const [toggleEditor, setToggleEditor] = useState(false);
-  const [comment, setComment] = useState("Add your comments...");
-  const { status, data: session } = useSession();
+  //const [comment, setComment] = useState("Add your comments...");
+  let comment = "Add your comments...";
   const onChange = (value: string) => {
-    setComment(value);
+    comment = value;
   };
 
   const events = useMemo(() => {
@@ -30,7 +33,6 @@ const StoryComments = () => {
       spellChecker: false,
     } as SimpleMDE.Options;
   }, []);
-
   return (
     <div>
       {!toggleEditor && (
@@ -47,14 +49,27 @@ const StoryComments = () => {
       {toggleEditor && (
         <Box>
           <SimpleMde
-            events={events}
             onChange={onChange}
             value={comment}
             data-testid="autofocus-no-spellchecker-editor"
             options={autofocusNoSpellcheckerOptions}
           />
           <Flex gap="2" justify="end">
-            <Button onClick={() => console.log("ok")} color="indigo">
+            <Button
+              onClick={async () => {
+                const apiPath = `/api/stories/${storyId}/comments`;
+                const result = await axios
+                  .post(apiPath, {
+                    storyId,
+                    comment,
+                  })
+                  .catch((e) => {
+                    console.log("something wrong... ", e);
+                  });
+                console.log("Request Submitted..", result);
+              }}
+              color="indigo"
+            >
               Ok
             </Button>
             <Button
@@ -69,14 +84,9 @@ const StoryComments = () => {
         </Box>
       )}
       <Flex my="2" gap="3" direction="column">
-        <StoryCommentBox
-          name={session?.user?.name! || "Sakthivel Samuthiram"}
-          imageUrl={session?.user?.image || null}
-          comment="sample Text from story comments box."
-        ></StoryCommentBox>
+        <StoryCommentBox storyId={storyId} newComment={comment} />
       </Flex>
     </div>
   );
 };
-
 export default StoryComments;

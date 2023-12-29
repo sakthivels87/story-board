@@ -22,6 +22,7 @@ const fetchStory = cache((storyId: number) =>
 const StoryDetailPage = async ({ params }: Props) => {
   const session = await getServerSession(authOptions);
   const story = await fetchStory(parseInt(params.id));
+
   if (!story) notFound();
   const renderComp = session ? (
     <UpdateStoryStatus story={story} />
@@ -38,7 +39,7 @@ const StoryDetailPage = async ({ params }: Props) => {
         <Card my="5">
           <Markdown>{story.description}</Markdown>
         </Card>
-        <StoryComments />
+        {session && <StoryComments storyId={String(story.id)} />}
       </Box>
       {session && (
         <Flex direction="column" gap="4">

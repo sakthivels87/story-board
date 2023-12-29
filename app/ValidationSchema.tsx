@@ -26,8 +26,4 @@ export const StoryCommentSchema = z.object({
     .string()
     .min(3, { message: "Story comment text is required." })
     .max(65535),
-  userId: z
-    .string()
-    .min(10, { message: "valid user id is required." })
-    .max(255),
 });

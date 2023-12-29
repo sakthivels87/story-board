@@ -17,5 +17,28 @@ export async function GET(
 export async function POST(request: NextRequest) {
   const session = await getServerSession(authOptions);
   if (!session) return NextResponse.json({}, { status: 401 });
-  return NextResponse.json("Successfully added comments", { status: 201 });
+  const body = await request.json();
+  console.log(body, "----Received");
+  const valiation = StoryCommentSchema.safeParse(body);
+  if (!valiation.success) {
+    return NextResponse.json(valiation.error.errors, { status: 400 });
+  }
+  const { storyId, comment } = body;
+  console.log("story id and comments--->", storyId, "---->", comment);
+  if (session.user?.email) {
+    const user = await prisma?.user.findUnique({
+      where: { email: session.user.email },
+    });
+    const userId = user ? user.id : "";
+    const result = await prisma?.comments.create({
+      data: {
+        storyId,
+        comment,
+        userId,
+      },
+    });
+    return NextResponse.json(result, { status: 201 });
+  } else {
+    return NextResponse.json("User email is not found", { status: 404 });
+  }
 }

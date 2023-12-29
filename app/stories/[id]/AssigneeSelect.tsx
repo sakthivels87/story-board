@@ -1,5 +1,4 @@
 "use client";
-import React, { useEffect, useState } from "react";
 import { Story, User } from "@prisma/client";
 import { Select } from "@radix-ui/themes";
 import axios from "axios";

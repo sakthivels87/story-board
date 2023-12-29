@@ -51,7 +51,7 @@ model User {
 model Comments {
   id        Int      @id @default(autoincrement())
   storyId   String
-  createdAt DateTime
+  createdAt DateTime @default(now())
   comment   String
   userId    String   @db.VarChar(255)
 }
