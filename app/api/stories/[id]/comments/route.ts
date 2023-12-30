@@ -18,13 +18,11 @@ export async function POST(request: NextRequest) {
   const session = await getServerSession(authOptions);
   if (!session) return NextResponse.json({}, { status: 401 });
   const body = await request.json();
-  console.log(body, "----Received");
   const valiation = StoryCommentSchema.safeParse(body);
   if (!valiation.success) {
     return NextResponse.json(valiation.error.errors, { status: 400 });
   }
   const { storyId, comment } = body;
-  console.log("story id and comments--->", storyId, "---->", comment);
   if (session.user?.email) {
     const user = await prisma?.user.findUnique({
       where: { email: session.user.email },

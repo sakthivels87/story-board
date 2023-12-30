@@ -5,19 +5,26 @@ import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
 import Skeleton from "@/app/components/Skeleton";
 import toast, { Toaster } from "react-hot-toast";
+import { useRouter } from "next/navigation";
 
 const AssigneeSelect = ({ story }: { story: Story }) => {
   const { data: users, error, isLoading } = useUsers();
-
+  const router = useRouter();
   const assingUser = async (userId: String) => {
     userId = userId === "unassigned" ? "" : userId;
-    await axios
+    const status = userId ? "IN_PROGRESS" : "OPEN";
+    const resp = await axios
       .patch("/api/stories/" + story.id, {
         assignedToUserId: userId || null,
+        status,
       })
       .catch((e) => {
         toast.error("Changes could not be saved.");
       });
+    if (resp?.status === 200) {
+      router.push("/stories/list");
+      router.refresh();
+    }
   };
 
   if (error) return null;
@@ -25,7 +32,7 @@ const AssigneeSelect = ({ story }: { story: Story }) => {
   return (
     <>
       <Select.Root
-        defaultValue={story.assignedToUserId || " "}
+        defaultValue={story.assignedToUserId || "unassigned"}
         onValueChange={assingUser}
       >
         <Select.Trigger placeholder="Assign..." />

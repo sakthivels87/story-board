@@ -2,10 +2,12 @@
 import { Status, Story } from "@prisma/client";
 import { Select } from "@radix-ui/themes";
 import axios from "axios";
+import { useRouter } from "next/navigation";
 import React from "react";
 import toast, { Toaster } from "react-hot-toast";
 
 const UpdateStoryStatus = ({ story }: { story: Story }) => {
+  const router = useRouter();
   const statuses: { label: string; value: Status }[] = [
     {
       label: "Open",
@@ -21,8 +23,7 @@ const UpdateStoryStatus = ({ story }: { story: Story }) => {
     },
   ];
   const updateStatus = async (status: string) => {
-    console.log("status: ", status);
-    await axios
+    const resp = await axios
       .patch("/api/stories/" + story.id, {
         status,
       })
@@ -31,6 +32,10 @@ const UpdateStoryStatus = ({ story }: { story: Story }) => {
           "Error occurred. Unable to update the status. " + e.message
         );
       });
+    if (resp?.status === 200) {
+      router.push("/stories/list");
+      router.refresh();
+    }
   };
   return (
     <>

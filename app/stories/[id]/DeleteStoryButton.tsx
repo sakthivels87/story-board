@@ -29,9 +29,8 @@ const DeleteStoryButton = ({ id }: Props) => {
             <Button
               color="red"
               onClick={async () => {
-                console.log("story id: ", id);
                 await axios.delete("/api/stories/" + id);
-                router.push("/stories");
+                router.push("/stories/list");
                 router.refresh();
               }}
             >

@@ -7,15 +7,10 @@ import React, { useMemo, useState } from "react";
 import { SimpleMdeToCodemirrorEvents } from "react-simplemde-editor";
 import StoryCommentBox from "./StoryCommentBox";
 import axios from "axios";
-import { useQuery } from "@tanstack/react-query";
-import Skeleton from "react-loading-skeleton";
-import { Comments } from "@prisma/client";
-
 const SimpleMde = dynamic(() => import("react-simplemde-editor"));
 
 const StoryComments = async ({ storyId }: { storyId: string }) => {
   const [toggleEditor, setToggleEditor] = useState(false);
-  //const [comment, setComment] = useState("Add your comments...");
   let comment = "Add your comments...";
   const onChange = (value: string) => {
     comment = value;
@@ -66,7 +61,11 @@ const StoryComments = async ({ storyId }: { storyId: string }) => {
                   .catch((e) => {
                     console.log("something wrong... ", e);
                   });
-                console.log("Request Submitted..", result);
+
+                if (result) {
+                  comment = "";
+                  setToggleEditor(false);
+                }
               }}
               color="indigo"
             >
