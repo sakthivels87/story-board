@@ -59,41 +59,43 @@ const NewStoryPage = async ({ searchParams }: Props) => {
     where: { status: searchParams.status },
   });
 
-  if (stories.length === 0) return null;
-
   return (
     <Box className="max-w-5xl">
       <StoryAction storyCount={storyCount} />
-      <Table.Root className="mt-5" variant="surface">
-        <Table.Header>
-          <TableHeader searchParams={searchParams} />
-        </Table.Header>
-        <Table.Body>
-          {stories.map((story) => {
-            return (
-              <Table.Row key={story.id}>
-                <Table.RowHeaderCell>
-                  <Link href={`/stories/${story.id}`}>{story.title}</Link>
-                  <div className="block md:hidden">
-                    <StoryStatusBadge status={story.status} />
-                  </div>
-                </Table.RowHeaderCell>
-                <Table.Cell className="hidden md:table-cell">
-                  <StoryStatusBadge status={story.status} />
-                </Table.Cell>
-                <Table.Cell className="hidden md:table-cell">
-                  {story.createdAt.toLocaleString()}
-                </Table.Cell>
-              </Table.Row>
-            );
-          })}
-        </Table.Body>
-      </Table.Root>
-      <Pagination
-        pageSize={pageSize}
-        itemCount={storyCount}
-        currentPage={page}
-      />
+      {stories.length > 0 && (
+        <>
+          <Table.Root className="mt-5" variant="surface">
+            <Table.Header>
+              <TableHeader searchParams={searchParams} />
+            </Table.Header>
+            <Table.Body>
+              {stories.map((story) => {
+                return (
+                  <Table.Row key={story.id}>
+                    <Table.RowHeaderCell>
+                      <Link href={`/stories/${story.id}`}>{story.title}</Link>
+                      <div className="block md:hidden">
+                        <StoryStatusBadge status={story.status} />
+                      </div>
+                    </Table.RowHeaderCell>
+                    <Table.Cell className="hidden md:table-cell">
+                      <StoryStatusBadge status={story.status} />
+                    </Table.Cell>
+                    <Table.Cell className="hidden md:table-cell">
+                      {story.createdAt.toLocaleString()}
+                    </Table.Cell>
+                  </Table.Row>
+                );
+              })}
+            </Table.Body>
+          </Table.Root>
+          <Pagination
+            pageSize={pageSize}
+            itemCount={storyCount}
+            currentPage={page}
+          />
+        </>
+      )}
     </Box>
   );
 };
